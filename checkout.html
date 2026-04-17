@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Braj Pure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                Braj<span>Pure</span>
+            </a>
+            <a href="index.html" style="font-weight: 500; color: var(--text-dark);"><i class="fas fa-arrow-left" style="margin-right: 5px;"></i> Back to Home</a>
+        </div>
+    </header>
+
+    <div class="checkout-wrapper">
+        <div class="container">
+            <div class="checkout-grid">
+                
+                <!-- Delivery Details Form -->
+                <div class="checkout-card">
+                    <h2>Delivery Details</h2>
+                    <form id="checkoutForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" class="form-control" required placeholder="Enter first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" required placeholder="Enter last name">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" class="form-control" required placeholder="10-digit mobile number">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address (Optional)</label>
+                                <input type="email" id="email" class="form-control" placeholder="For order updates">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Full Delivery Address</label>
+                            <textarea id="address" class="form-control" rows="3" required placeholder="House No, Building, Street Area"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <select id="city" class="form-control" required>
+                                    <option value="" disabled selected>Select your city</option>
+                                    <option value="Mathura">Mathura</option>
+                                    <option value="Vrindavan">Vrindavan</option>
+                                    <option value="Agra">Agra</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pincode">PIN Code</label>
+                                <input type="text" id="pincode" class="form-control" required placeholder="6-digit PIN">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <input type="checkbox" id="terms" required style="margin-right: 10px;">
+                            <label for="terms" style="font-size: 0.9rem; color: var(--text-light);">I agree that my card will not be charged for the 3-day free trial. The subscription starts after the trial ends.</label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; font-size: 1.1rem; padding: 1rem;">Place Order & Start Free Trial</button>
+                    </form>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="checkout-card" style="height: fit-content;">
+                    <h2>Order Summary</h2>
+                    <div class="order-summary-item" style="font-weight: 600;">
+                        <span id="summaryProduct">Product Name</span>
+                        <span id="summaryQtyInfo">Qty: 1 Liter / Day</span>
+                    </div>
+                    
+                    <hr style="border: none; border-top: 1px solid #eee; margin: 1.5rem 0;">
+                    
+                    <div class="order-summary-item">
+                        <span>3 Day Free Trial</span>
+                        <span style="color: var(--primary-color); font-weight: 600;">₹0.00</span>
+                    </div>
+                    <div class="order-summary-item" style="color: var(--text-light); font-size: 0.9rem;">
+                        <span>Monthly Subscription (30 days)</span>
+                        <span id="summaryPriceCalc">₹X x 30</span>
+                    </div>
+                    
+                    <div class="order-total">
+                        <span>Total Monthly Bill</span>
+                        <span id="summaryTotal">₹0</span>
+                    </div>
+
+                    <div style="background: rgba(212, 175, 55, 0.1); padding: 1rem; border-radius: 8px; margin-top: 2rem; display: flex; gap: 10px; align-items: flex-start;">
+                        <i class="fas fa-shield-alt" style="color: var(--secondary-color); margin-top: 3px;"></i>
+                        <p style="font-size: 0.85rem; color: var(--text-dark); line-height: 1.4;"><strong>Secure Checkout.</strong> You can cancel your subscription at any time during the 3-day trial without being charged.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal Overlay -->
+    <div class="cart-modal-overlay" id="successModal">
+        <div class="cart-modal" style="text-align: center;">
+            <div style="width: 80px; height: 80px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.5rem;">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Order Placed Successfully!</h2>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">Thank you for choosing health with Braj Pure. We have received your delivery details. Your 3-Day Free Trial will start tomorrow morning!</p>
+            <a href="index.html" class="btn btn-primary" style="width: 100%;">Return to Home</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load cart data from localStorage
+            const product = localStorage.getItem('brajpure_cart_product') || 'Desi Cow Milk (A2)';
+            const priceText = localStorage.getItem('brajpure_cart_price') || '₹120 x 30 days';
+            const total = localStorage.getItem('brajpure_cart_total') || '₹3600';
+            const volume = localStorage.getItem('brajpure_cart_volume') || '1 Liter';
+            const qty = localStorage.getItem('brajpure_cart_qty') || '1';
+
+            document.getElementById('summaryProduct').textContent = product;
+            document.getElementById('summaryQtyInfo').textContent = `Qty: ${qty} x ${volume} / Day`;
+            document.getElementById('summaryPriceCalc').textContent = priceText;
+            document.getElementById('summaryTotal').textContent = total;
+
+            // Handle Form Submission
+            const checkoutForm = document.getElementById('checkoutForm');
+            const successModal = document.getElementById('successModal');
+
+            checkoutForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // In a real app, send data to server here
+                
+                // Show success modal
+                successModal.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

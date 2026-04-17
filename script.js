@@ -74,4 +74,90 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Cart Modal Logic
+    const subscribeBtns = document.querySelectorAll('.subscribe-btn');
+    const cartModal = document.getElementById('cartModal');
+    const closeModal = document.getElementById('closeModal');
+    
+    const cartProductName = document.getElementById('cartProductName');
+    const cartMonthlyCalc = document.getElementById('cartMonthlyCalc');
+    const cartTotal = document.getElementById('cartTotal');
+    const confirmSubscriptionBtn = document.getElementById('confirmSubscriptionBtn');
+
+    const cartVolume = document.getElementById('cartVolume');
+    const cartQuantity = document.getElementById('cartQuantity');
+    
+    let currentBasePricePerLiter = 0;
+
+    const updateCartCalculation = () => {
+        const volume = parseFloat(cartVolume.value);
+        const qty = parseInt(cartQuantity.value);
+        
+        // Calculate daily price based on volume
+        // We'll charge 50% for 500ml (0.5), or we can just multiply
+        const dailyPrice = (currentBasePricePerLiter * volume) * qty;
+        const monthlyTotal = dailyPrice * 30;
+
+        const volumeText = volume === 1 ? '1 Liter' : '500 ml';
+        
+        cartMonthlyCalc.textContent = `₹${dailyPrice} x 30 days`;
+        cartTotal.textContent = `₹${monthlyTotal}`;
+    };
+
+    if (cartModal) {
+        cartVolume.addEventListener('change', updateCartCalculation);
+        cartQuantity.addEventListener('input', updateCartCalculation);
+
+        subscribeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const product = btn.getAttribute('data-product');
+                currentBasePricePerLiter = parseInt(btn.getAttribute('data-price'));
+                
+                // Reset inputs
+                cartVolume.value = "1";
+                cartQuantity.value = "1";
+
+                // Update Modal Content
+                cartProductName.textContent = product;
+                updateCartCalculation();
+
+                // Show Modal
+                cartModal.classList.add('active');
+            });
+        });
+
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            cartModal.classList.remove('active');
+        });
+
+        // Close when clicking outside the modal
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.classList.remove('active');
+            }
+        });
+
+        // Confirm Subscription
+        confirmSubscriptionBtn.addEventListener('click', () => {
+            // Save to localStorage to display on checkout page
+            const product = cartProductName.textContent;
+            const priceText = cartMonthlyCalc.textContent;
+            const total = cartTotal.textContent;
+            
+            const volumeText = cartVolume.options[cartVolume.selectedIndex].text;
+            const qty = cartQuantity.value;
+            
+            localStorage.setItem('brajpure_cart_product', product);
+            localStorage.setItem('brajpure_cart_price', priceText);
+            localStorage.setItem('brajpure_cart_total', total);
+            localStorage.setItem('brajpure_cart_volume', volumeText);
+            localStorage.setItem('brajpure_cart_qty', qty);
+
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+        });
+    }
 });
